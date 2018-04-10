@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.example.android.baking.R;
@@ -32,12 +33,14 @@ public class MasterActivity extends AppCompatActivity {
     private ActivityMasterBinding binding;
     // RecyclerView adapter instance
     private MasterAdapter masterAdapter;
-    // List of favorite movies
+    // List of recipes
     List<Recipe> recipesList;
     // Used to check the internet connection changes
     Merlin merlin;
     // Used to check the instant internet connection status
     MerlinsBeard merlinsBeard;
+    // Recipes loaded checker
+    boolean recipesAreLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class MasterActivity extends AppCompatActivity {
             @Override
             public void onConnect() {
                 // Only load the recipes if they are not currently loaded
-                if (binding.recyclerMain.recyclerView.getVisibility()!= View.VISIBLE) {
+                if (!recipesAreLoaded) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -71,13 +74,10 @@ public class MasterActivity extends AppCompatActivity {
             }
         });
 
-        // Depending on the network status, show the appropriate view
+        // If no internet connection is detected at app launch, then show the issue disclaimer
         if (!merlinsBeard.isConnected()) {
             Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                     binding.recyclerMain.issueView, R.drawable.no_internet_connection);
-        }
-        else {
-            getRecipes();
         }
     }
 
@@ -110,6 +110,7 @@ public class MasterActivity extends AppCompatActivity {
                     masterAdapter.notifyDataSetChanged();
                     Utils.showResults(binding.recyclerMain.loadingSpinner,
                             binding.recyclerMain.recyclerView);
+                    recipesAreLoaded = true;
                 } else {
                     Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                             binding.recyclerMain.issueView, R.drawable.error_avatar);
