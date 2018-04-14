@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Style for the recipe titles in the master view -->
+    <style name="RecipeMaster">
+        <item name="android:textSize">@dimen/recipe_title_size_master</item>
+        <item name="android:textColor">@color/deepOrange</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">@dimen/very_large_margin</item>
+        <item name="android:layout_margin">@dimen/very_large_margin</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

@@ -1,12 +1,12 @@
-package com.example.android.baking.ui;
+package com.example.android.baking.ui.recipes;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.View;
 
 import com.example.android.baking.R;
 import com.example.android.baking.databinding.ActivityMasterBinding;
@@ -33,8 +33,6 @@ public class MasterActivity extends AppCompatActivity {
     private ActivityMasterBinding binding;
     // RecyclerView adapter instance
     private MasterAdapter masterAdapter;
-    // List of recipes
-    List<Recipe> recipesList;
     // Used to check the internet connection changes
     Merlin merlin;
     // Used to check the instant internet connection status
@@ -46,10 +44,12 @@ public class MasterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        Log.v(LOG_TAG, "LOG// onCreate reached and recipesAreLoaded is " + recipesAreLoaded);
         // Inflate the content view
         binding = DataBindingUtil.setContentView(this, R.layout.activity_master);
         binding.recyclerMain.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Add items separation
+        binding.recyclerMain.recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         // Set the RecyclerView adapter to the correspondent view
         masterAdapter = new MasterAdapter(this);
         binding.recyclerMain.recyclerView.setAdapter(masterAdapter);
@@ -62,12 +62,13 @@ public class MasterActivity extends AppCompatActivity {
         merlin.registerConnectable(new Connectable() {
             @Override
             public void onConnect() {
+                Log.v(LOG_TAG, "LOG// registerConnectable reached");
                 // Only load the recipes if they are not currently loaded
                 if (!recipesAreLoaded) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            getRecipes();
+                            getRecipes();;
                         }
                     });
                 }
@@ -78,6 +79,8 @@ public class MasterActivity extends AppCompatActivity {
         if (!merlinsBeard.isConnected()) {
             Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                     binding.recyclerMain.issueView, R.drawable.no_internet_connection);
+        } else {
+            getRecipes();
         }
     }
 
@@ -96,7 +99,7 @@ public class MasterActivity extends AppCompatActivity {
     }
 
     private void getRecipes() {
-
+        Log.v(LOG_TAG, "LOG// getRecipes reached");
         Utils.showLoadingSpinner(binding.recyclerMain.issueView, binding.recyclerMain.loadingSpinner,
                 binding.recyclerMain.recyclerView);
         RecipeService recipeService = RemoteClient.getClient().create(RecipeService.class);
@@ -106,18 +109,21 @@ public class MasterActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {
+                    Log.v(LOG_TAG, "LOG// response.isSuccessful() reached");
                     masterAdapter.setRecipeInfoList(response.body());
                     masterAdapter.notifyDataSetChanged();
                     Utils.showResults(binding.recyclerMain.loadingSpinner,
                             binding.recyclerMain.recyclerView);
                     recipesAreLoaded = true;
                 } else {
+                    Log.v(LOG_TAG, "LOG// response.failed() reached");
                     Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                             binding.recyclerMain.issueView, R.drawable.error_avatar);
                 }
             }
             @Override
             public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
+                Log.v(LOG_TAG, "LOG// onFailure reached");
                 Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                         binding.recyclerMain.issueView, R.drawable.error_avatar);
             }

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Baking</string>
 
-    <!-- Content descriptions-->
-    <string name="recipe_title">Recipe title</string>
-    <string name="issue_message">Issue message</string>
+    <!-- Segments titles-->
+    <string name="ingredients_title">Ingredients</string>
+    <string name="steps_title">Steps</string>
 
 </resources>
