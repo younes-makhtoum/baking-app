@@ -1,8 +1,10 @@
-package com.example.android.baking.ui;
+package com.example.android.baking.ui.recipes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
+import com.example.android.baking.ui.steps.DetailActivity;
 
 import java.util.List;
 
@@ -49,19 +52,19 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
         Recipe currentRecipe = recipesList.get(position);
         holder.recipeTitleTextView.setText(currentRecipe.getName());
 
-/*        // implement setOnClickListener event on item view.
+        // implement setOnClickListener event on item view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // open another activity on item click
                 Intent intent = new Intent(context, DetailActivity.class);
                 // put recipe object in the Intent
+                Log.v(LOG_TAG, "LOG// The selected recipe position is " + recipesList.get(position));
                 intent.putExtra("Recipe", recipesList.get(position));
                 // start Intent
                 context.startActivity(intent);
             }
-        });*/
-
+        });
     }
 
     @Override

@@ -1,5 +1,10 @@
 package com.example.android.baking.services;
 
+import com.example.android.baking.models.Ingredient;
+import com.example.android.baking.models.Step;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -19,11 +24,10 @@ public class RemoteClient {
                 .addInterceptor(interceptor)
                 .build();
 
-
         if(retrofit==null){
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                     .client(client)
                     .build();
         }

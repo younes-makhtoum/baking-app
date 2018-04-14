@@ -3,10 +3,17 @@ package com.example.android.baking.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Ingredient implements Parcelable {
 
+    @SerializedName("ingredient")
     private String name;
+
+    @SerializedName("measure")
     private String unitOfMeasure;
+
+    @SerializedName("quantity")
     private float quantity;
 
     public Ingredient(String name, String unitOfMeasure, int quantity) {
