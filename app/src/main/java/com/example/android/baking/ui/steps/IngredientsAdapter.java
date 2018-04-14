@@ -52,7 +52,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         Ingredient currentIngredient = ingredientsList.get(position);
         Log.v(LOG_TAG, "LOG// currentIngredient's name is " + currentIngredient.getName());
         holder.ingredientName.setText(currentIngredient.getName());
-        holder.ingredientQuantity.setText((int) currentIngredient.getQuantity());
+        holder.ingredientQuantity.setText(String.valueOf(currentIngredient.getQuantity()));
         holder.ingredientUnitOfMeasure.setText(currentIngredient.getUnitOfMeasure());
     }
 

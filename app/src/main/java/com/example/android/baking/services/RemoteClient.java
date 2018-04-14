@@ -24,15 +24,10 @@ public class RemoteClient {
                 .addInterceptor(interceptor)
                 .build();
 
-        Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Ingredient.class, new RecipeDeserializer<Ingredient>())
-            .registerTypeAdapter(Step.class, new RecipeDeserializer<Step>())
-            .create();
-
         if(retrofit==null){
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                     .client(client)
                     .build();
         }

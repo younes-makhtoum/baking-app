@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,11 +14,22 @@ import java.util.ListIterator;
 
 public class Recipe implements Parcelable {
 
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("ingredients")
     private ArrayList<Ingredient> ingredients;
+
+    @SerializedName("steps")
     private ArrayList<Step> steps;
+
+    @SerializedName("servings")
     private int servings;
+
+    @SerializedName("image")
     private String image;
 
     public Recipe(int id, String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int servings, String image) {
