@@ -50,7 +50,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onBindViewHolder(@NonNull IngredientsAdapter.MyViewHolder holder, final int position) {
         Ingredient currentIngredient = ingredientsList.get(position);
-        Log.v(LOG_TAG, "LOG// currentIngredient's name is " + currentIngredient.getName());
         holder.ingredientName.setText(currentIngredient.getName());
         holder.ingredientQuantity.setText(String.valueOf(currentIngredient.getQuantity()));
         holder.ingredientUnitOfMeasure.setText(currentIngredient.getUnitOfMeasure());

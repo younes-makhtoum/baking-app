@@ -14,9 +14,9 @@ public class Ingredient implements Parcelable {
     private String unitOfMeasure;
 
     @SerializedName("quantity")
-    private float quantity;
+    private double quantity;
 
-    public Ingredient(String name, String unitOfMeasure, int quantity) {
+    public Ingredient(String name, String unitOfMeasure, double quantity) {
         this.name = name;
         this.unitOfMeasure = unitOfMeasure;
         this.quantity = quantity;
@@ -28,7 +28,7 @@ public class Ingredient implements Parcelable {
     public String getUnitOfMeasure() {
         return unitOfMeasure;
     }
-    public float getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
@@ -36,14 +36,14 @@ public class Ingredient implements Parcelable {
     public void writeToParcel(Parcel dest, int flags){
         dest.writeString(name);
         dest.writeString(unitOfMeasure);
-        dest.writeFloat(quantity);
+        dest.writeDouble(quantity);
     }
 
     // Constructor used for parcel
     private Ingredient(Parcel parcel){
         name = parcel.readString();
         unitOfMeasure = parcel.readString();
-        quantity = parcel.readInt();
+        quantity = parcel.readDouble();
     }
 
     // Creator - used when un-parceling a parcel (creating a Ingredient object)

@@ -7,20 +7,26 @@
 
     <TextView
         android:id="@+id/ingredient_name"
-        android:layout_weight="2"
+        android:layout_weight="6"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/large_text_size"
+        android:textStyle="bold"
+        style="@style/IngredientItem"/>
 
     <TextView
         android:id="@+id/ingredient_quantity"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        style="@style/IngredientItem"/>
 
     <TextView
         android:id="@+id/ingredient_unit_of_measure"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/IngredientItem"/>
 
 </LinearLayout>

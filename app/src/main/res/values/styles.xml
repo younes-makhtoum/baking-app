@@ -8,13 +8,40 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- Style for the recipe titles in the master view -->
-    <style name="RecipeMaster">
-        <item name="android:textSize">@dimen/recipe_title_size_master</item>
-        <item name="android:textColor">@color/deepOrange</item>
+    <!-- Style for the recipe items in the master view -->
+    <style name="RecipeItem">
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:padding">@dimen/very_large_margin</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:padding">@dimen/large_margin</item>
         <item name="android:layout_margin">@dimen/very_large_margin</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Style for the ingredients items in the detail view -->
+    <style name="IngredientItem">
+        <item name="android:layout_margin">@dimen/large_margin</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <!-- Style for the steps items in the detail view -->
+    <style name="StepItem">
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_margin">@dimen/large_margin</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <!-- Style for the section titles -->
+    <style name="SectionTitles">
+        <item name="android:textSize">@dimen/very_large_text_size</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/pureWhite</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">@dimen/small_margin</item>
         <item name="android:gravity">center</item>
     </style>
 

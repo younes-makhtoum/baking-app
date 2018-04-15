@@ -3,6 +3,7 @@ package com.example.android.baking.ui.steps;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,10 @@ public class RecipeStepsFragment extends Fragment {
 
         binding.ingredientsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.stepsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Add items separation
+        binding.ingredientsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        binding.stepsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
         ingredientsAdapter = new IngredientsAdapter(getContext());
         stepsAdapter = new StepsAdapter(getContext());

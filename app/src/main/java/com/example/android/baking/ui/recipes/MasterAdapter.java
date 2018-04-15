@@ -59,7 +59,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
                 // open another activity on item click
                 Intent intent = new Intent(context, DetailActivity.class);
                 // put recipe object in the Intent
-                Log.v(LOG_TAG, "LOG// The selected recipe position is " + recipesList.get(position));
                 intent.putExtra("Recipe", recipesList.get(position));
                 // start Intent
                 context.startActivity(intent);

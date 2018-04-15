@@ -62,7 +62,6 @@ public class MasterActivity extends AppCompatActivity {
         merlin.registerConnectable(new Connectable() {
             @Override
             public void onConnect() {
-                Log.v(LOG_TAG, "LOG// registerConnectable reached");
                 // Only load the recipes if they are not currently loaded
                 if (!recipesAreLoaded) {
                     runOnUiThread(new Runnable() {
@@ -99,7 +98,6 @@ public class MasterActivity extends AppCompatActivity {
     }
 
     private void getRecipes() {
-        Log.v(LOG_TAG, "LOG// getRecipes reached");
         Utils.showLoadingSpinner(binding.recyclerMain.issueView, binding.recyclerMain.loadingSpinner,
                 binding.recyclerMain.recyclerView);
         RecipeService recipeService = RemoteClient.getClient().create(RecipeService.class);
@@ -109,7 +107,6 @@ public class MasterActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {
-                    Log.v(LOG_TAG, "LOG// response.isSuccessful() reached");
                     masterAdapter.setRecipeInfoList(response.body());
                     masterAdapter.notifyDataSetChanged();
                     Utils.showResults(binding.recyclerMain.loadingSpinner,

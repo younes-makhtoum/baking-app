@@ -7,6 +7,8 @@
     <dimen name="small_margin">8dp</dimen>
 
     <!-- Text sizes -->
-    <dimen name="recipe_title_size_master">24sp</dimen>
+    <dimen name="very_large_text_size">24sp</dimen>
+    <dimen name="large_text_size">18sp</dimen>
+    <dimen name="small_text_size">12sp</dimen>
 
 </resources>

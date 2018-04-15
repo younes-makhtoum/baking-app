@@ -29,7 +29,8 @@ public class DetailActivity extends AppCompatActivity {
         // Collect our intent and get our parcel with the selected Recipe object
         Intent intent = getIntent();
         selectedRecipe = intent.getParcelableExtra("Recipe");
-        Log.v(LOG_TAG, "LOG// The selectedRecipe " + selectedRecipe);
+
+        setTitle(selectedRecipe.getName());
     }
     public Recipe getSelectedRecipe(){
         return this.selectedRecipe;
