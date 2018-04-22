@@ -27,7 +27,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
     private ArrayList<Step> stepsList;
     private Step currentStep;
 
-    private static StepDetailsFragment stepDetailsFragment;
+    private StepDetailsFragment stepDetailsFragment;
 
     public StepsAdapter(Context context) {
         this.context = context;
@@ -63,8 +63,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
             public void onClick(View view) {
                 if (context.getResources().getBoolean(R.bool.has_two_panes)) {
                     /* display recipe step details on the right pane */
-                    stepDetailsFragment.displayStepVideo(currentStep);
-                    stepDetailsFragment.displayStepFullDescription(currentStep);
+                    //TODO
                 } else {
                     /* start a separate activity */
                     Intent intent = new Intent(context, StepDetailsActivity.class);

@@ -3,6 +3,7 @@ package com.example.android.baking.ui.steps;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.baking.R;
 import com.example.android.baking.databinding.FragmentRecipeStepsBinding;
@@ -32,9 +35,6 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Log.v(LOG_TAG, "LOG// We are in onCreateView");
-
         // Inflate the layout for this fragment
         binding = FragmentStepDetailsBinding
                 .bind(inflater.inflate(R.layout.fragment_step_details, container, false));
@@ -51,9 +51,9 @@ public class StepDetailsFragment extends Fragment {
             binding.stepVideoThumbnail.setImageResource(R.drawable.thumbnail_not_available);
         } else {
             Picasso.get()
-                    .load(step.getThumbnailURL())
-                    .placeholder(R.drawable.thumbnail_not_available)
-                    .into(binding.stepVideoThumbnail);
+                .load(step.getThumbnailURL())
+                .placeholder(R.drawable.thumbnail_not_available)
+                .into(binding.stepVideoThumbnail);
         }
     }
 

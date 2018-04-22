@@ -12,23 +12,28 @@ public class StepDetailsActivity extends FragmentActivity {
     // Tag for log messages
     private static final String LOG_TAG = StepDetailsActivity.class.getName();
 
+    Step selectedStep;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // If we are in two-pane layout mode, this activity is no longer necessary
         if (getResources().getBoolean(R.bool.has_two_panes)) {
             finish();
             return;
         }
-
         // Collect our intent and get our parcel with the selected Step object
         Intent intent = getIntent();
-        Step selectedStep = intent.getParcelableExtra("Step");
+        selectedStep = intent.getParcelableExtra("Step");
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         // Place an StepDetailsFragment as our content pane
         StepDetailsFragment stepDetailsFragment = new StepDetailsFragment();
         getSupportFragmentManager().beginTransaction().add(android.R.id.content, stepDetailsFragment).commit();
+        getSupportFragmentManager().executePendingTransactions();
 
         // Display the detail data about the step in the corresponding views
         stepDetailsFragment.displayStepVideo(selectedStep);

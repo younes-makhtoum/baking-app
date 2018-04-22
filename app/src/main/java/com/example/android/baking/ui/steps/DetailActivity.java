@@ -28,11 +28,7 @@ public class DetailActivity extends FragmentActivity {
         Intent intent = getIntent();
         selectedRecipe = intent.getParcelableExtra("Recipe");
 
-        Log.v(LOG_TAG, "LOG// We are ready to create the RecipeStepsFragment");
-
         setContentView(R.layout.main_layout);
-
-        Log.v(LOG_TAG, "LOG// We have created the RecipeStepsFragment");
 
         // Determine whether we are in single-pane or dual-pane mode by testing the visibility
         // of the step details view.
@@ -40,6 +36,16 @@ public class DetailActivity extends FragmentActivity {
         isDualPane = stepDetailsView != null && stepDetailsView.getVisibility() == View.VISIBLE;
 
         setTitle(selectedRecipe.getName());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(isDualPane) {
+            StepDetailsFragment stepDetailsFragment = new StepDetailsFragment();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, stepDetailsFragment).commit();
+            getSupportFragmentManager().executePendingTransactions();
+        }
     }
 
     public Recipe getSelectedRecipe(){
