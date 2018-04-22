@@ -32,6 +32,9 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.v(LOG_TAG, "LOG// We are in onCreateView");
+
         // Inflate the layout for this fragment
         binding = FragmentStepDetailsBinding
                 .bind(inflater.inflate(R.layout.fragment_step_details, container, false));
@@ -44,12 +47,8 @@ public class StepDetailsFragment extends Fragment {
      * @param step : the step about which we would like to display the related video
      */
     public void displayStepVideo(Step step) {
-
-        Log.v(LOG_TAG, "LOG// We are in displayStepVideo and the step is " + step);
-        Log.v(LOG_TAG, "LOG// We are in displayStepVideo and the step's vide thumbnail is " + step.getThumbnailURL());
-
         if (step.getThumbnailURL().isEmpty()){
-            binding.stepVideoThumbnail.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.thumbnail_not_available));
+            binding.stepVideoThumbnail.setImageResource(R.drawable.thumbnail_not_available);
         } else {
             Picasso.get()
                     .load(step.getThumbnailURL())

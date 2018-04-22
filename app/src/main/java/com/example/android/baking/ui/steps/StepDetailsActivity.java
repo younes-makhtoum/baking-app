@@ -22,13 +22,13 @@ public class StepDetailsActivity extends FragmentActivity {
             return;
         }
 
-        // Place an StepDetailsFragment as our content pane
-        StepDetailsFragment stepDetailsFragment = new StepDetailsFragment();
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, stepDetailsFragment).commit();
-
         // Collect our intent and get our parcel with the selected Step object
         Intent intent = getIntent();
         Step selectedStep = intent.getParcelableExtra("Step");
+
+        // Place an StepDetailsFragment as our content pane
+        StepDetailsFragment stepDetailsFragment = new StepDetailsFragment();
+        getSupportFragmentManager().beginTransaction().add(android.R.id.content, stepDetailsFragment).commit();
 
         // Display the detail data about the step in the corresponding views
         stepDetailsFragment.displayStepVideo(selectedStep);

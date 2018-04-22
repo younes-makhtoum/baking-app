@@ -28,9 +28,11 @@ public class DetailActivity extends FragmentActivity {
         Intent intent = getIntent();
         selectedRecipe = intent.getParcelableExtra("Recipe");
 
-        Log.v(LOG_TAG, "LOG// We are in onCreate and the selectedRecipe is : " + selectedRecipe);
+        Log.v(LOG_TAG, "LOG// We are ready to create the RecipeStepsFragment");
 
         setContentView(R.layout.main_layout);
+
+        Log.v(LOG_TAG, "LOG// We have created the RecipeStepsFragment");
 
         // Determine whether we are in single-pane or dual-pane mode by testing the visibility
         // of the step details view.

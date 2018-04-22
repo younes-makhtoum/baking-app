@@ -43,13 +43,14 @@ public class RecipeStepsFragment extends Fragment {
         // get selected recipe
         selectedRecipe = ((DetailActivity) Objects.requireNonNull(this.getActivity())).getSelectedRecipe();
 
-        Log.v(LOG_TAG, "LOG// We are in onCreate and the selectedRecipe is : " + selectedRecipe);
-
         setRecipeDetailData();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Log.v(LOG_TAG, "LOG// We are in onCreateView of RecipeStepsFragment");
+
         FragmentRecipeStepsBinding binding = FragmentRecipeStepsBinding
                 .bind(inflater.inflate(R.layout.fragment_recipe_steps, container, false));
 
@@ -67,8 +68,6 @@ public class RecipeStepsFragment extends Fragment {
     }
 
     private void setRecipeDetailData(){
-        Log.v(LOG_TAG, "LOG// We are in setRecipeDetailData and selectedRecipe is = " + selectedRecipe.getName());
-        Log.v(LOG_TAG, "LOG// We are in setRecipeDetailData and selectedRecipe's ingredients list is = " + selectedRecipe.getIngredients());
         ingredientsAdapter.setIngredientsInfoList(selectedRecipe.getIngredients());
         stepsAdapter.setStepsInfoList(selectedRecipe.getSteps());
     }
