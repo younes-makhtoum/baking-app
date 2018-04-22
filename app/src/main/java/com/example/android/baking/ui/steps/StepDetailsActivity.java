@@ -9,6 +9,9 @@ import com.example.android.baking.models.Step;
 
 public class StepDetailsActivity extends FragmentActivity {
 
+    // Tag for log messages
+    private static final String LOG_TAG = StepDetailsActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

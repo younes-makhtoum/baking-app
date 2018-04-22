@@ -66,7 +66,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
                     stepDetailsFragment.displayStepFullDescription(currentStep);
                 } else {
                     /* start a separate activity */
-                    Intent intent = new Intent(context, DetailActivity.class);
+                    Intent intent = new Intent(context, StepDetailsActivity.class);
                     intent.putExtra("Step", stepsList.get(position));
                     context.startActivity(intent);
                 }

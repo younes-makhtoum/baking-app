@@ -3,6 +3,7 @@ package com.example.android.baking.ui.steps;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.example.android.baking.R;
@@ -23,16 +24,18 @@ public class DetailActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Collect our intent and get our parcel with the selected Recipe object
+        Intent intent = getIntent();
+        selectedRecipe = intent.getParcelableExtra("Recipe");
+
+        Log.v(LOG_TAG, "LOG// We are in onCreate and the selectedRecipe is : " + selectedRecipe);
+
         setContentView(R.layout.main_layout);
 
         // Determine whether we are in single-pane or dual-pane mode by testing the visibility
         // of the step details view.
         View stepDetailsView = findViewById(R.id.step_details);
         isDualPane = stepDetailsView != null && stepDetailsView.getVisibility() == View.VISIBLE;
-
-        // Collect our intent and get our parcel with the selected Recipe object
-        Intent intent = getIntent();
-        selectedRecipe = intent.getParcelableExtra("Recipe");
 
         setTitle(selectedRecipe.getName());
     }

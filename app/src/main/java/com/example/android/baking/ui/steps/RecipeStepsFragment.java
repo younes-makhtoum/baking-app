@@ -42,6 +42,9 @@ public class RecipeStepsFragment extends Fragment {
 
         // get selected recipe
         selectedRecipe = ((DetailActivity) Objects.requireNonNull(this.getActivity())).getSelectedRecipe();
+
+        Log.v(LOG_TAG, "LOG// We are in onCreate and the selectedRecipe is : " + selectedRecipe);
+
         setRecipeDetailData();
     }
 
