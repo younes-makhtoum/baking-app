@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +18,37 @@ import java.util.Objects;
 
 public class RecipeStepsFragment extends Fragment {
 
+    // Tag for log messages
+    private static final String LOG_TAG = RecipeStepsFragment.class.getName();
+
     private Recipe selectedRecipe;
 
     private IngredientsAdapter ingredientsAdapter;
     private StepsAdapter stepsAdapter;
 
+    /**
+     * Default constructor required by framework.
+     */
+    public RecipeStepsFragment() {
+        super();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ingredientsAdapter = new IngredientsAdapter(getContext());
+        stepsAdapter = new StepsAdapter(getContext());
+
+        // get selected recipe
+        selectedRecipe = ((DetailActivity) Objects.requireNonNull(this.getActivity())).getSelectedRecipe();
+        setRecipeDetailData();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        FragmentRecipeStepsBinding binding = FragmentRecipeStepsBinding.bind(inflater.inflate(R.layout.fragment_recipe_steps, container, false));
-
-        View rootView = binding.getRoot();
+        FragmentRecipeStepsBinding binding = FragmentRecipeStepsBinding
+                .bind(inflater.inflate(R.layout.fragment_recipe_steps, container, false));
 
         binding.ingredientsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.stepsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -36,20 +57,15 @@ public class RecipeStepsFragment extends Fragment {
         binding.ingredientsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         binding.stepsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
-        ingredientsAdapter = new IngredientsAdapter(getContext());
-        stepsAdapter = new StepsAdapter(getContext());
-
         binding.ingredientsRecycler.setAdapter(ingredientsAdapter);
         binding.stepsRecycler.setAdapter(stepsAdapter);
 
-        selectedRecipe = ((DetailActivity) Objects.requireNonNull(this.getActivity())).getSelectedRecipe();
-
-        setRecipeDetailData();
-
-        return rootView;
+        return binding.getRoot();
     }
 
     private void setRecipeDetailData(){
+        Log.v(LOG_TAG, "LOG// We are in setRecipeDetailData and selectedRecipe is = " + selectedRecipe.getName());
+        Log.v(LOG_TAG, "LOG// We are in setRecipeDetailData and selectedRecipe's ingredients list is = " + selectedRecipe.getIngredients());
         ingredientsAdapter.setIngredientsInfoList(selectedRecipe.getIngredients());
         stepsAdapter.setStepsInfoList(selectedRecipe.getSteps());
     }

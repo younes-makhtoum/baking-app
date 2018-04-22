@@ -44,7 +44,6 @@ public class MasterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        Log.v(LOG_TAG, "LOG// onCreate reached and recipesAreLoaded is " + recipesAreLoaded);
         // Inflate the content view
         binding = DataBindingUtil.setContentView(this, R.layout.activity_master);
         binding.recyclerMain.recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -1,7 +1,9 @@
 package com.example.android.baking.ui.steps;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.example.android.baking.models.Step;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder> {
 
@@ -21,6 +24,9 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
 
     private Context context;
     private ArrayList<Step> stepsList;
+    private Step currentStep;
+
+    private static StepDetailsFragment stepDetailsFragment;
 
     public StepsAdapter(Context context) {
         this.context = context;
@@ -33,6 +39,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
         private MyViewHolder(View itemView) {
             super(itemView);
             stepShortDescription = itemView.findViewById(R.id.step_short_description);
+            itemView.setClickable(true);
         }
     }
 
@@ -46,8 +53,25 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull StepsAdapter.MyViewHolder holder, final int position) {
-        Step currentStep = stepsList.get(position);
+        currentStep = stepsList.get(position);
         holder.stepShortDescription.setText(currentStep.getShortDescription());
+        // mark  the view as selected:
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (context.getResources().getBoolean(R.bool.has_two_panes)) {
+                    /* display recipe step details on the right pane */
+                    stepDetailsFragment.displayStepVideo(currentStep);
+                    stepDetailsFragment.displayStepFullDescription(currentStep);
+                } else {
+                    /* start a separate activity */
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("Step", stepsList.get(position));
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override

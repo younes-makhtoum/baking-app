@@ -52,15 +52,11 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
         Recipe currentRecipe = recipesList.get(position);
         holder.recipeTitleTextView.setText(currentRecipe.getName());
 
-        // implement setOnClickListener event on item view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // open another activity on item click
                 Intent intent = new Intent(context, DetailActivity.class);
-                // put recipe object in the Intent
                 intent.putExtra("Recipe", recipesList.get(position));
-                // start Intent
                 context.startActivity(intent);
             }
         });

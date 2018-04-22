@@ -27,6 +27,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.recipes.MasterActivity" />
         </activity>
+        <activity
+            android:name=".ui.steps.StepDetailsActivity"/>
     </application>
 
 </manifest>
