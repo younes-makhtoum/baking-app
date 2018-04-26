@@ -2,7 +2,6 @@ package com.example.android.baking.ui.steps;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.example.android.baking.R;
@@ -36,6 +35,10 @@ public class DetailActivity extends FragmentActivity {
         // Set title of activity according to the selected recipe.
         setTitle(selectedRecipe.getName());
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps, new RecipeStepsFragment()).commit();
+        }
+
         setContentView(R.layout.main_layout);
 
         // Determine whether we are in single-pane or dual-pane mode by testing the visibility
@@ -50,10 +53,12 @@ public class DetailActivity extends FragmentActivity {
         EventBus.getDefault().register(this);
 
         // If we are in dual pane (tablet mode in landscape), initialize a StepDetailsFragment
-        if(isDualPane) {
+        if (isDualPane) {
+            // Initiate new step details fragment
             stepDetailsFragment = new StepDetailsFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.step_details, stepDetailsFragment).commit();
             getSupportFragmentManager().executePendingTransactions();
+            // Initialize right pane with data from first step
             stepDetailsFragment.displayStepVideo(selectedRecipe.getSteps().get(0));
             stepDetailsFragment.displayStepFullDescription(selectedRecipe.getSteps().get(0));
         }

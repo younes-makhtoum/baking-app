@@ -26,9 +26,9 @@ public class RecipeStepsFragment extends Fragment {
     private IngredientsAdapter ingredientsAdapter;
     private StepsAdapter stepsAdapter;
 
-    /**
-     * Default constructor required by framework.
-     */
+    // Key for saving data in case of a screen orientation change
+    static final String STATE_SELECTED_RECIPE = "STATE_SELECTED_RECIPE";
+
     public RecipeStepsFragment() {
         super();
     }
@@ -40,9 +40,13 @@ public class RecipeStepsFragment extends Fragment {
         ingredientsAdapter = new IngredientsAdapter(getContext());
         stepsAdapter = new StepsAdapter(getContext());
 
-        // get selected recipe
-        selectedRecipe = ((DetailActivity) Objects.requireNonNull(this.getActivity())).getSelectedRecipe();
-
+        // Check if we a saved state to get back the selected recipe
+        if (savedInstanceState != null) {
+            selectedRecipe = savedInstanceState.getParcelable(STATE_SELECTED_RECIPE);
+        } else {
+            // get selected recipe
+            selectedRecipe = ((DetailActivity) Objects.requireNonNull(this.getActivity())).getSelectedRecipe();
+        }
         setRecipeDetailData();
     }
 
@@ -65,7 +69,14 @@ public class RecipeStepsFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STATE_SELECTED_RECIPE, selectedRecipe);
+    }
+
     private void setRecipeDetailData(){
+        Log.v(LOG_TAG, "LOG// setRecipeDetailData// selectedRecipe = " + selectedRecipe);
         ingredientsAdapter.setIngredientsInfoList(selectedRecipe.getIngredients());
         stepsAdapter.setStepsInfoList(selectedRecipe.getSteps());
     }
