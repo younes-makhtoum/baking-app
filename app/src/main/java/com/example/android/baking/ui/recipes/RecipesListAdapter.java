@@ -18,15 +18,15 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHolder> {
+public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.MyViewHolder> {
 
     // Tag for log messages
-    public static final String LOG_TAG = MasterAdapter.class.getName();
+    public static final String LOG_TAG = RecipesListAdapter.class.getName();
 
     private final Context context;
     private List<Recipe> recipesList;
 
-    public MasterAdapter(Context context) {
+    public RecipesListAdapter(Context context) {
         this.context = context;
     }
 
@@ -42,14 +42,14 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
 
     @NonNull
     @Override
-    public MasterAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipesListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the item layout
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MasterAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecipesListAdapter.MyViewHolder holder, final int position) {
 
         Recipe currentRecipe = recipesList.get(position);
         holder.recipeTitleTextView.setText(currentRecipe.getName());
@@ -60,7 +60,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
                 EventBus.getDefault().postSticky(new RecipeSelectionEvent(recipesList.get(position)));
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("Recipe", recipesList.get(position));
-                intent.putExtra("CallerActivity", "RecipesListActivity");
                 context.startActivity(intent);
             }
         });

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
+import com.example.android.baking.models.Step;
 import com.example.android.baking.services.events.RecipeSelectionEvent;
 import com.example.android.baking.services.events.StepSelectionEvent;
 
@@ -12,6 +13,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class DetailActivity extends AppCompatActivity {
+
+    boolean savedInstanceStateEnabled = false;
 
     // Tag for log messages
     private static final String LOG_TAG = DetailActivity.class.getName();
@@ -22,12 +25,19 @@ public class DetailActivity extends AppCompatActivity {
     // Recipe object instance declaration to handle the received parcelable
     private Recipe selectedRecipe;
 
+    // Step object instance declaration to populate right pane accordingly if relevant
+    private Step selectedStep;
+
     // StepDetailsFragment object in case we are in dual pane mode
     private StepDetailsFragment stepDetailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            savedInstanceStateEnabled = true;
+        }
 
         selectedRecipe = getIntent().getParcelableExtra("Recipe");
 
@@ -48,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         // If we are coming from the RecipesListActivity, initiate a new recipe steps fragment
-        if (savedInstanceState == null) {
+        if (!savedInstanceStateEnabled) {
             getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps, new RecipeStepsFragment()).commit();
         }
 
@@ -58,9 +68,22 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Populate steps details data with first step only if dual pane mode is effective
+        // Populate steps details data with first step only if dual pane mode is effective.
+        // If we are coming from the RecipesListActivity (savedInstanceStateEnabled is false),
+        // display data related to first step.
         if (isDualPane) {
-            EventBus.getDefault().post(new StepSelectionEvent(selectedRecipe.getSteps().get(0)));
+            if (!savedInstanceStateEnabled) {
+                EventBus.getDefault().postSticky(new StepSelectionEvent(selectedRecipe.getSteps().get(0)));
+            } else {
+                StepSelectionEvent stickyEvent = EventBus.getDefault().getStickyEvent(StepSelectionEvent.class);
+                // Better check that an event was actually posted before
+                if(stickyEvent != null) {
+                    // Now do something with it
+                    EventBus.getDefault().postSticky(stickyEvent);
+                } else {
+                    EventBus.getDefault().postSticky(new StepSelectionEvent(selectedStep));
+                }
+            }
         }
     }
 
@@ -70,12 +93,13 @@ public class DetailActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     public void onStepSelectionEvent(StepSelectionEvent event) {
         // Update steps details data only if dual pane mode is effective
+        selectedStep = event.getStep();
         if (isDualPane) {
-        stepDetailsFragment.displayStepVideo(event.getStep());
-        stepDetailsFragment.displayStepFullDescription(event.getStep());
+        stepDetailsFragment.displayStepVideo(selectedStep);
+        stepDetailsFragment.displayStepFullDescription(selectedStep);
         }
     }
 

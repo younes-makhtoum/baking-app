@@ -1,6 +1,5 @@
 package com.example.android.baking.ui.steps;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -34,8 +33,7 @@ public class StepDetailsActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         // Collect our intent and get our parcel with the selected Step object
-        Intent intent = getIntent();
-        selectedStep = intent.getParcelableExtra("Step");
+        selectedStep = getIntent().getParcelableExtra("Step");
 
         // Set title of activity according to the selected recipe.
         setTitle(selectedRecipe.getName() + " : " + selectedStep.getShortDescription());

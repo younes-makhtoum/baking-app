@@ -32,11 +32,9 @@ public class RecipesListActivity extends AppCompatActivity {
     // Store the binding
     private ActivityRecipesListBinding binding;
     // RecyclerView adapter instance
-    private MasterAdapter masterAdapter;
+    private RecipesListAdapter recipesListAdapter;
     // Used to check the internet connection changes
     private Merlin merlin;
-    // Used to check the instant internet connection status
-    private MerlinsBeard merlinsBeard;
     // Recipes loaded checker
     private boolean recipesAreLoaded = false;
 
@@ -50,12 +48,12 @@ public class RecipesListActivity extends AppCompatActivity {
         // Add items separation
         binding.recyclerMain.recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         // Set the RecyclerView adapter to the correspondent view
-        masterAdapter = new MasterAdapter(this);
-        binding.recyclerMain.recyclerView.setAdapter(masterAdapter);
+        recipesListAdapter = new RecipesListAdapter(this);
+        binding.recyclerMain.recyclerView.setAdapter(recipesListAdapter);
 
         // Initialize the internet connection listeners
         merlin = new Merlin.Builder().withConnectableCallbacks().build(getApplicationContext());
-        merlinsBeard = MerlinsBeard.from(getApplicationContext());
+        MerlinsBeard merlinsBeard = MerlinsBeard.from(getApplicationContext());
 
         // Register the internet status activation listener
         merlin.registerConnectable(new Connectable() {
@@ -106,8 +104,8 @@ public class RecipesListActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {
-                    masterAdapter.setRecipeInfoList(response.body());
-                    masterAdapter.notifyDataSetChanged();
+                    recipesListAdapter.setRecipeInfoList(response.body());
+                    recipesListAdapter.notifyDataSetChanged();
                     Utils.showResults(binding.recyclerMain.loadingSpinner,
                             binding.recyclerMain.recyclerView);
                     recipesAreLoaded = true;

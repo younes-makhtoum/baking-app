@@ -60,9 +60,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
             public void onClick(View view) {
                 if (context.getResources().getBoolean(R.bool.has_two_panes)) {
                     /* display recipe step details on the right pane */
-                    EventBus.getDefault().post(new StepSelectionEvent(stepsList.get(position)));
+                    EventBus.getDefault().postSticky(new StepSelectionEvent(stepsList.get(position)));
                 } else {
                     /* start a separate activity */
+                    EventBus.getDefault().postSticky(new StepSelectionEvent(stepsList.get(position)));
                     Intent intent = new Intent(context, StepDetailsActivity.class);
                     intent.putExtra("Step", stepsList.get(position));
                     context.startActivity(intent);
