@@ -1,66 +1,66 @@
 package com.example.android.baking.ui.steps;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
-import com.example.android.baking.services.SelectionEvent;
+import com.example.android.baking.services.events.RecipeSelectionEvent;
+import com.example.android.baking.services.events.StepSelectionEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class DetailActivity extends FragmentActivity {
+public class DetailActivity extends AppCompatActivity {
 
     // Tag for log messages
     private static final String LOG_TAG = DetailActivity.class.getName();
 
     // Whether or not we are in dual-pane mode
-    public boolean isDualPane = false;
+    private boolean isDualPane = false;
 
     // Recipe object instance declaration to handle the received parcelable
     private Recipe selectedRecipe;
 
     // StepDetailsFragment object in case we are in dual pane mode
-    StepDetailsFragment stepDetailsFragment;
+    private StepDetailsFragment stepDetailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Collect our intent and get our parcel with the selected Recipe object
         selectedRecipe = getIntent().getParcelableExtra("Recipe");
+
+        EventBus.getDefault().register(this);
 
         // Set title of activity according to the selected recipe.
         setTitle(selectedRecipe.getName());
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps, new RecipeStepsFragment()).commit();
-        }
+        isDualPane = getResources().getBoolean(R.bool.has_two_panes);
 
-        setContentView(R.layout.main_layout);
-
-        // Determine whether we are in single-pane or dual-pane mode by testing the visibility
-        // of the step details view.
-        View stepDetailsView = findViewById(R.id.step_details);
-        isDualPane = stepDetailsView != null && stepDetailsView.getVisibility() == View.VISIBLE;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-
-        // If we are in dual pane (tablet mode in landscape), initialize a StepDetailsFragment
+        // If we are in dual pane mode (device is tablet in landscape orientation),
+        // initialize a StepDetailsFragment
         if (isDualPane) {
             // Initiate new step details fragment
             stepDetailsFragment = new StepDetailsFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.step_details, stepDetailsFragment).commit();
             getSupportFragmentManager().executePendingTransactions();
-            // Initialize right pane with data from first step
-            stepDetailsFragment.displayStepVideo(selectedRecipe.getSteps().get(0));
-            stepDetailsFragment.displayStepFullDescription(selectedRecipe.getSteps().get(0));
+        }
+
+        // If we are coming from the RecipesListActivity, initiate a new recipe steps fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps, new RecipeStepsFragment()).commit();
+        }
+
+        setContentView(R.layout.main_layout);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Populate steps details data with first step only if dual pane mode is effective
+        if (isDualPane) {
+            EventBus.getDefault().post(new StepSelectionEvent(selectedRecipe.getSteps().get(0)));
         }
     }
 
@@ -70,11 +70,18 @@ public class DetailActivity extends FragmentActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    // This method will be called when a SelectionEvent is posted
     @Subscribe
-    public void onSelectionEvent(SelectionEvent event) {
+    public void onStepSelectionEvent(StepSelectionEvent event) {
+        // Update steps details data only if dual pane mode is effective
+        if (isDualPane) {
         stepDetailsFragment.displayStepVideo(event.getStep());
         stepDetailsFragment.displayStepFullDescription(event.getStep());
+        }
+    }
+
+    @Subscribe(sticky = true)
+    public void onRecipeSelectionEvent(RecipeSelectionEvent event) {
+        selectedRecipe = event.getRecipe();
     }
 
     public Recipe getSelectedRecipe(){

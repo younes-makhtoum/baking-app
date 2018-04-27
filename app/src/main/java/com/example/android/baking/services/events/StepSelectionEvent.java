@@ -1,12 +1,12 @@
-package com.example.android.baking.services;
+package com.example.android.baking.services.events;
 
 import com.example.android.baking.models.Step;
 
-public class SelectionEvent {
+public class StepSelectionEvent {
 
     private final Step step;
 
-    public SelectionEvent(Step step) {
+    public StepSelectionEvent(Step step) {
         this.step = step;
     }
 

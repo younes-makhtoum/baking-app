@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
 import com.example.android.baking.R;
-import com.example.android.baking.databinding.ActivityMasterBinding;
+import com.example.android.baking.databinding.ActivityRecipesListBinding;
 import com.example.android.baking.services.RecipeService;
 import com.example.android.baking.services.RemoteClient;
 import com.example.android.baking.services.Utils;
@@ -25,27 +25,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MasterActivity extends AppCompatActivity {
+public class RecipesListActivity extends AppCompatActivity {
 
     // Tag for log messages
-    public static final String LOG_TAG = MasterActivity.class.getName();
+    private static final String LOG_TAG = RecipesListActivity.class.getName();
     // Store the binding
-    private ActivityMasterBinding binding;
+    private ActivityRecipesListBinding binding;
     // RecyclerView adapter instance
     private MasterAdapter masterAdapter;
     // Used to check the internet connection changes
-    Merlin merlin;
+    private Merlin merlin;
     // Used to check the instant internet connection status
-    MerlinsBeard merlinsBeard;
+    private MerlinsBeard merlinsBeard;
     // Recipes loaded checker
-    boolean recipesAreLoaded = false;
+    private boolean recipesAreLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Inflate the content view
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_master);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
         binding.recyclerMain.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Add items separation
         binding.recyclerMain.recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -66,7 +66,7 @@ public class MasterActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            getRecipes();;
+                            getRecipes();
                         }
                     });
                 }

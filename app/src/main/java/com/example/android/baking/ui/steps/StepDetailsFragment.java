@@ -1,21 +1,12 @@
 package com.example.android.baking.ui.steps;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.example.android.baking.R;
-import com.example.android.baking.databinding.FragmentRecipeStepsBinding;
 import com.example.android.baking.databinding.FragmentStepDetailsBinding;
 import com.example.android.baking.models.Step;
 import com.squareup.picasso.Picasso;
@@ -47,7 +38,7 @@ public class StepDetailsFragment extends Fragment {
      * @param step : the step about which we would like to display the related video
      */
     public void displayStepVideo(Step step) {
-        if (step.getThumbnailURL().isEmpty()){
+        if (step.getThumbnailURL().isEmpty()) {
             binding.stepVideoThumbnail.setImageResource(R.drawable.thumbnail_not_available);
         } else {
             Picasso.get()

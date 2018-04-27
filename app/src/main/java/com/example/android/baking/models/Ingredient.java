@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
 public class Ingredient implements Parcelable {
 
     @SerializedName("ingredient")
-    private String name;
+    private final String name;
 
     @SerializedName("measure")
-    private String unitOfMeasure;
+    private final String unitOfMeasure;
 
     @SerializedName("quantity")
-    private double quantity;
+    private final double quantity;
 
     public Ingredient(String name, String unitOfMeasure, double quantity) {
         this.name = name;

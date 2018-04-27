@@ -8,19 +8,19 @@ import com.google.gson.annotations.SerializedName;
 public class Step implements Parcelable {
 
     @SerializedName("id")
-    private int id;
+    private final int id;
 
     @SerializedName("shortDescription")
-    private String shortDescription;
+    private final String shortDescription;
 
     @SerializedName("description")
-    private String fullDescription;
+    private final String fullDescription;
 
     @SerializedName("videoURL")
-    private String videoURL;
+    private final String videoURL;
 
     @SerializedName("thumbnailURL")
-    private String thumbnailURL;
+    private final String thumbnailURL;
 
     public Step(int id, String shortDescription, String fullDescription, String videoURL, String thumbnailURL) {
         this.id = id;

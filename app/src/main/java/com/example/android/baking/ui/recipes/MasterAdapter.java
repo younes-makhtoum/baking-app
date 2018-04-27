@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,10 @@ import android.widget.TextView;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
+import com.example.android.baking.services.events.RecipeSelectionEvent;
 import com.example.android.baking.ui.steps.DetailActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView recipeTitleTextView;
+        private final TextView recipeTitleTextView;
 
         private MyViewHolder(View itemView) {
             super(itemView);
@@ -55,8 +57,10 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EventBus.getDefault().postSticky(new RecipeSelectionEvent(recipesList.get(position)));
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("Recipe", recipesList.get(position));
+                intent.putExtra("CallerActivity", "RecipesListActivity");
                 context.startActivity(intent);
             }
         });

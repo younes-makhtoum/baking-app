@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ public class RecipeStepsFragment extends Fragment {
     private StepsAdapter stepsAdapter;
 
     // Key for saving data in case of a screen orientation change
-    static final String STATE_SELECTED_RECIPE = "STATE_SELECTED_RECIPE";
+    private static final String STATE_SELECTED_RECIPE = "STATE_SELECTED_RECIPE";
 
     public RecipeStepsFragment() {
         super();
@@ -60,7 +59,7 @@ public class RecipeStepsFragment extends Fragment {
         binding.stepsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Add items separation
-        binding.ingredientsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        binding.ingredientsRecycler.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()), LinearLayoutManager.VERTICAL));
         binding.stepsRecycler.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
         binding.ingredientsRecycler.setAdapter(ingredientsAdapter);
@@ -76,7 +75,6 @@ public class RecipeStepsFragment extends Fragment {
     }
 
     private void setRecipeDetailData(){
-        Log.v(LOG_TAG, "LOG// setRecipeDetailData// selectedRecipe = " + selectedRecipe);
         ingredientsAdapter.setIngredientsInfoList(selectedRecipe.getIngredients());
         stepsAdapter.setStepsInfoList(selectedRecipe.getSteps());
     }

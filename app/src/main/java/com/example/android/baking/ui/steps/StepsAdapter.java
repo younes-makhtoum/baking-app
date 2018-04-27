@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Step;
-import com.example.android.baking.services.SelectionEvent;
+import com.example.android.baking.services.events.StepSelectionEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -22,11 +22,9 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
     // Tag for log messages
     public static final String LOG_TAG = StepsAdapter.class.getName();
 
-    private Context context;
+    private final Context context;
     private ArrayList<Step> stepsList;
     private Step currentStep;
-
-    private StepDetailsFragment stepDetailsFragment;
 
     public StepsAdapter(Context context) {
         this.context = context;
@@ -34,7 +32,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView stepShortDescription;
+        private final TextView stepShortDescription;
 
         private MyViewHolder(View itemView) {
             super(itemView);
@@ -62,7 +60,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
             public void onClick(View view) {
                 if (context.getResources().getBoolean(R.bool.has_two_panes)) {
                     /* display recipe step details on the right pane */
-                    EventBus.getDefault().post(new SelectionEvent(stepsList.get(position)));
+                    EventBus.getDefault().post(new StepSelectionEvent(stepsList.get(position)));
                 } else {
                     /* start a separate activity */
                     Intent intent = new Intent(context, StepDetailsActivity.class);
