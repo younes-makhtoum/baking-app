@@ -7,6 +7,7 @@ import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
 import com.example.android.baking.models.Step;
 import com.example.android.baking.services.events.RecipeSelectionEvent;
+import com.example.android.baking.services.events.StepSelectionEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,6 +49,7 @@ public class StepDetailsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // Populate fragment views with selectedStep's data
+        EventBus.getDefault().postSticky(new StepSelectionEvent(selectedStep));
         stepDetailsFragment.displayStepVideo(selectedStep);
         stepDetailsFragment.displayStepFullDescription(selectedStep);
     }
@@ -56,6 +58,15 @@ public class StepDetailsActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void onStepSelectionEvent(StepSelectionEvent event) {
+        // Update steps details data only if dual pane mode is effective
+        selectedStep = event.getStep();
+        stepDetailsFragment.releasePlayer();
+        stepDetailsFragment.displayStepVideo(selectedStep);
+        stepDetailsFragment.displayStepFullDescription(selectedStep);
     }
 
     // This method will be called when a RecipeSelectionEvent is posted

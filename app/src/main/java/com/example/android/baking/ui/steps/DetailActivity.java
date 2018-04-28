@@ -97,6 +97,9 @@ public class DetailActivity extends AppCompatActivity {
     public void onStepSelectionEvent(StepSelectionEvent event) {
         // Update steps details data only if dual pane mode is effective
         selectedStep = event.getStep();
+
+        stepDetailsFragment.releasePlayer();
+
         if (isDualPane) {
         stepDetailsFragment.displayStepVideo(selectedStep);
         stepDetailsFragment.displayStepFullDescription(selectedStep);

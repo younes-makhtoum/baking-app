@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.android.exoplayer2.ui.PlayerView;
+
 public class Utils {
 
     public static void showLoadingSpinner(ImageView issueView, ProgressBar loadingSpinner, RecyclerView recyclerView) {
@@ -22,5 +24,15 @@ public class Utils {
         recyclerView.setVisibility(View.GONE);
         issueView.setImageResource(drawable);
         issueView.setVisibility(View.VISIBLE);
+    }
+
+    public static void showStepVideo(PlayerView playerView, ImageView thumbnailView) {
+        thumbnailView.setVisibility(View.GONE);
+        playerView.setVisibility(View.VISIBLE);
+    }
+
+    public static void showStepThumbnail(ImageView thumbnailView, PlayerView playerView) {
+        playerView.setVisibility(View.GONE);
+        thumbnailView.setVisibility(View.VISIBLE);
     }
 }
