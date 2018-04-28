@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,25 +11,28 @@ import android.widget.TextView;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
+import com.example.android.baking.services.events.RecipeSelectionEvent;
 import com.example.android.baking.ui.steps.DetailActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHolder> {
+public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.MyViewHolder> {
 
     // Tag for log messages
-    public static final String LOG_TAG = MasterAdapter.class.getName();
+    public static final String LOG_TAG = RecipesListAdapter.class.getName();
 
     private final Context context;
     private List<Recipe> recipesList;
 
-    public MasterAdapter(Context context) {
+    public RecipesListAdapter(Context context) {
         this.context = context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView recipeTitleTextView;
+        private final TextView recipeTitleTextView;
 
         private MyViewHolder(View itemView) {
             super(itemView);
@@ -40,27 +42,24 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyViewHold
 
     @NonNull
     @Override
-    public MasterAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipesListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the item layout
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MasterAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecipesListAdapter.MyViewHolder holder, final int position) {
 
         Recipe currentRecipe = recipesList.get(position);
         holder.recipeTitleTextView.setText(currentRecipe.getName());
 
-        // implement setOnClickListener event on item view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // open another activity on item click
+                EventBus.getDefault().postSticky(new RecipeSelectionEvent(recipesList.get(position)));
                 Intent intent = new Intent(context, DetailActivity.class);
-                // put recipe object in the Intent
                 intent.putExtra("Recipe", recipesList.get(position));
-                // start Intent
                 context.startActivity(intent);
             }
         });

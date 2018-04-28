@@ -1,10 +1,6 @@
 package com.example.android.baking.services;
 
-import com.example.android.baking.models.Ingredient;
-import com.example.android.baking.models.Step;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

@@ -3,7 +3,6 @@ package com.example.android.baking.ui.steps;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,13 @@ import com.example.android.baking.R;
 import com.example.android.baking.models.Ingredient;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.MyViewHolder> {
 
     // Tag for log messages
     public static final String LOG_TAG = IngredientsAdapter.class.getName();
 
-    private Context context;
+    private final Context context;
     private ArrayList<Ingredient> ingredientsList;
 
     public IngredientsAdapter(Context context) {
@@ -29,7 +27,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView ingredientName, ingredientQuantity, ingredientUnitOfMeasure;
+        private final TextView ingredientName;
+        private final TextView ingredientQuantity;
+        private final TextView ingredientUnitOfMeasure;
 
         private MyViewHolder(View itemView) {
             super(itemView);

@@ -3,15 +3,26 @@ package com.example.android.baking.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Step implements Parcelable {
 
-    private int id;
-    private String shortDescription;
-    private String fullDescription;
-    private String videoURL;
-    private String thumbnailURL;
+    @SerializedName("id")
+    private final int id;
 
-    public Step(int id, String shortDescription, String fullDescription,String videoURL, String thumbnailURL) {
+    @SerializedName("shortDescription")
+    private final String shortDescription;
+
+    @SerializedName("description")
+    private final String fullDescription;
+
+    @SerializedName("videoURL")
+    private final String videoURL;
+
+    @SerializedName("thumbnailURL")
+    private final String thumbnailURL;
+
+    public Step(int id, String shortDescription, String fullDescription, String videoURL, String thumbnailURL) {
         this.id = id;
         this.shortDescription = shortDescription;
         this.fullDescription = fullDescription;
@@ -34,7 +45,6 @@ public class Step implements Parcelable {
     public String getThumbnailURL() {
         return thumbnailURL;
     }
-
 
     // Write object values to parcel for storage
     public void writeToParcel(Parcel dest, int flags){
