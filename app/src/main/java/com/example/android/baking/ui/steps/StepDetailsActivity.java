@@ -46,9 +46,6 @@ public class StepDetailsActivity extends AppCompatActivity {
         Display display = ((WindowManager) Objects.requireNonNull(this.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
         orientation = display.getRotation();
 
-        Log.v(LOG_TAG,"LOG// orientation is : " + orientation);
-        Log.v(LOG_TAG,"LOG// used layout is : " + orientation);
-
         if (savedInstanceState != null) {
             savedInstanceStateEnabled = true;
         }
