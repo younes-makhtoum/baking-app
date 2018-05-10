@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.baking.R;
+import com.example.android.baking.models.Recipe;
 import com.example.android.baking.models.Step;
 import com.example.android.baking.services.events.StepSelectionEvent;
+import com.example.android.baking.ui.steps.DetailActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -24,7 +26,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
 
     private final Context context;
     private ArrayList<Step> stepsList;
-    private Step currentStep;
 
     public StepsAdapter(Context context) {
         this.context = context;
@@ -52,8 +53,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull StepsAdapter.MyViewHolder holder, final int position) {
 
-        currentStep = stepsList.get(position);
-        holder.stepShortDescription.setText(currentStep.getShortDescription());
+        holder.stepShortDescription.setText(stepsList.get(position).getShortDescription());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

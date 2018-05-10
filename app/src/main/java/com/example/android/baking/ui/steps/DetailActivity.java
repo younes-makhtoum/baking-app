@@ -1,7 +1,11 @@
 package com.example.android.baking.ui.steps;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
@@ -12,6 +16,8 @@ import com.example.android.baking.services.events.StepSelectionEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Objects;
+
 public class DetailActivity extends AppCompatActivity {
 
     boolean savedInstanceStateEnabled = false;
@@ -19,21 +25,22 @@ public class DetailActivity extends AppCompatActivity {
     // Tag for log messages
     private static final String LOG_TAG = DetailActivity.class.getName();
 
-    // Whether or not we are in dual-pane mode
-    private boolean isDualPane = false;
-
     // Recipe object instance declaration to handle the received parcelable
     private Recipe selectedRecipe;
 
-    // Step object instance declaration to populate right pane accordingly if relevant
-    private Step selectedStep;
-
-    // StepDetailsFragment object in case we are in dual pane mode
+    private RecipeStepsFragment recipeStepsFragment;
     private StepDetailsFragment stepDetailsFragment;
+
+    private static final String TAG_RECIPE_STEPS_FRAGMENT = "RecipeStepsFragment";
+    private static final String TAG_STEP_DETAIL_FRAGMENT = "StepDetailsFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean isDualPane = getResources().getBoolean(R.bool.has_two_panes);
+
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState != null) {
             savedInstanceStateEnabled = true;
@@ -41,25 +48,25 @@ public class DetailActivity extends AppCompatActivity {
 
         selectedRecipe = getIntent().getParcelableExtra("Recipe");
 
-        EventBus.getDefault().register(this);
-
         // Set title of activity according to the selected recipe.
         setTitle(selectedRecipe.getName());
 
-        isDualPane = getResources().getBoolean(R.bool.has_two_panes);
-
-        // If we are in dual pane mode (device is tablet in landscape orientation),
-        // initialize a StepDetailsFragment
-        if (isDualPane) {
-            // Initiate new step details fragment
-            stepDetailsFragment = new StepDetailsFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.step_details, stepDetailsFragment).commit();
-            getSupportFragmentManager().executePendingTransactions();
+        // Initial flow from previous activity
+        if (!savedInstanceStateEnabled) {
+            // Create new RecipeStepsFragment
+            recipeStepsFragment = new RecipeStepsFragment();
+            fragmentManager.beginTransaction().add(R.id.recipe_steps, recipeStepsFragment, TAG_RECIPE_STEPS_FRAGMENT).commit();
+            // If we are in DualPane, then create also a new StepDetailsFragment
+            if(isDualPane){
+                stepDetailsFragment = new StepDetailsFragment();
+                fragmentManager.beginTransaction().add(R.id.step_details, stepDetailsFragment, TAG_STEP_DETAIL_FRAGMENT).commit();
+            }
         }
 
-        // If we are coming from the RecipesListActivity, initiate a new recipe steps fragment
-        if (!savedInstanceStateEnabled) {
-            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps, new RecipeStepsFragment()).commit();
+        // A configuration change occurred, when just need to retrieve our previously created fragments
+        if (savedInstanceStateEnabled) {
+            recipeStepsFragment = (RecipeStepsFragment) fragmentManager.findFragmentByTag(TAG_RECIPE_STEPS_FRAGMENT);
+            stepDetailsFragment = (StepDetailsFragment) fragmentManager.findFragmentByTag(TAG_STEP_DETAIL_FRAGMENT);
         }
 
         setContentView(R.layout.main_layout);
@@ -68,22 +75,12 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Populate steps details data with first step only if dual pane mode is effective.
-        // If we are coming from the RecipesListActivity (savedInstanceStateEnabled is false),
-        // display data related to first step.
-        if (isDualPane) {
-            if (!savedInstanceStateEnabled) {
-                EventBus.getDefault().postSticky(new StepSelectionEvent(selectedRecipe.getSteps().get(0)));
-            } else {
-                StepSelectionEvent stickyEvent = EventBus.getDefault().getStickyEvent(StepSelectionEvent.class);
-                // Better check that an event was actually posted before
-                if(stickyEvent != null) {
-                    // Now do something with it
-                    EventBus.getDefault().postSticky(stickyEvent);
-                } else {
-                    EventBus.getDefault().postSticky(new StepSelectionEvent(selectedStep));
-                }
-            }
+
+        // Register the EventBus to handle events and react accordingly
+        EventBus.getDefault().register(this);
+        // Initial flow from previous activity : display data related to first step.
+        if (!savedInstanceStateEnabled) {
+            EventBus.getDefault().postSticky(new StepSelectionEvent(selectedRecipe.getSteps().get(0)));
         }
     }
 
@@ -95,15 +92,9 @@ public class DetailActivity extends AppCompatActivity {
 
     @Subscribe(sticky = true)
     public void onStepSelectionEvent(StepSelectionEvent event) {
-        // Update steps details data only if dual pane mode is effective
-        selectedStep = event.getStep();
-
         stepDetailsFragment.releasePlayer();
-
-        if (isDualPane) {
-        stepDetailsFragment.displayStepVideo(selectedStep);
-        stepDetailsFragment.displayStepFullDescription(selectedStep);
-        }
+        stepDetailsFragment.displayStepVideo(event.getStep());
+        stepDetailsFragment.displayStepFullDescription(event.getStep());
     }
 
     @Subscribe(sticky = true)

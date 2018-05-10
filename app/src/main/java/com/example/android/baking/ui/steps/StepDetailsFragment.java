@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +27,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
-import static com.example.android.baking.services.Utils.showStepThumbnail;
 import static com.example.android.baking.services.Utils.showStepVideo;
+import static com.example.android.baking.services.Utils.showStepVideoThumbnail;
 
 public class StepDetailsFragment extends Fragment {
 
@@ -47,6 +49,13 @@ public class StepDetailsFragment extends Fragment {
     // Required empty public constructor
     public StepDetailsFragment() {
         super();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
     }
 
     @Override
@@ -95,7 +104,7 @@ public class StepDetailsFragment extends Fragment {
             showStepVideo(binding.stepVideo, binding.stepVideoThumbnail);
             loadStepVideo(Uri.parse(step.getVideoURL()));
         } else {
-            showStepThumbnail(binding.stepVideoThumbnail, binding.stepVideo);
+            showStepVideoThumbnail(binding.stepVideoThumbnail, binding.stepVideo);
         }
 
         if (!step.getThumbnailURL().isEmpty()) {
@@ -136,11 +145,21 @@ public class StepDetailsFragment extends Fragment {
         player.prepare(videoSource);
     }
 
+    public void hideSystemUi() {
+        binding.stepVideo.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
     /**
      * Displays a particular step video.
      * @param step : the step about which we would like to display the full description
      */
     public void displayStepFullDescription(Step step) {
+        Log.v(LOG_TAG,"LOG// displayStepFullDescription is reached and the step full desc is : " + step.getFullDescription());
         binding.stepFullDescription.setText(step.getFullDescription());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.android.baking.ui.recipes;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.example.android.baking.R;
 import com.example.android.baking.databinding.ActivityRecipesListBinding;
@@ -20,6 +23,7 @@ import com.novoda.merlin.MerlinsBeard;
 import com.novoda.merlin.registerable.connection.Connectable;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +41,8 @@ public class RecipesListActivity extends AppCompatActivity {
     private Merlin merlin;
     // Recipes loaded checker
     private boolean recipesAreLoaded = false;
+    // Orientation detection
+    private static int orientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,14 +116,12 @@ public class RecipesListActivity extends AppCompatActivity {
                             binding.recyclerMain.recyclerView);
                     recipesAreLoaded = true;
                 } else {
-                    Log.v(LOG_TAG, "LOG// response.failed() reached");
                     Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                             binding.recyclerMain.issueView, R.drawable.error_avatar);
                 }
             }
             @Override
             public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
-                Log.v(LOG_TAG, "LOG// onFailure reached");
                 Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
                         binding.recyclerMain.issueView, R.drawable.error_avatar);
             }

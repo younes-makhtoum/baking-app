@@ -1,5 +1,6 @@
 package com.example.android.baking.services;
 
+import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,7 +32,7 @@ public class Utils {
         playerView.setVisibility(View.VISIBLE);
     }
 
-    public static void showStepThumbnail(ImageView thumbnailView, PlayerView playerView) {
+    public static void showStepVideoThumbnail(ImageView thumbnailView, PlayerView playerView) {
         playerView.setVisibility(View.GONE);
         thumbnailView.setVisibility(View.VISIBLE);
     }
