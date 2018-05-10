@@ -37,15 +37,20 @@ public class StepDetailsFragment extends Fragment {
     private static final String LOG_TAG = StepDetailsFragment.class.getName();
 
     private Context context;
-
     private FragmentStepDetailsBinding binding;
 
+    // ExoPlayer variables
     private SimpleExoPlayer player;
     private boolean shouldAutoPlay;
     private TrackSelector trackSelector;
+    private long playbackPosition;
+    private int currentWindow;
 
     // Measures bandwidth during playback. Can be null if not required.
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+
+    // Key for saving video position in case of a screen orientation change
+    private static final String STATE_PLAYBACK_POSITION = "STATE_PLAYBACK_POSITION";
 
     // Required empty public constructor
     public StepDetailsFragment() {
@@ -55,20 +60,19 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // retain this fragment
-        setRetainInstance(true);
+        // Retrieve the video position after an orientation change
+        if (savedInstanceState != null) {
+            playbackPosition = savedInstanceState.getLong(STATE_PLAYBACK_POSITION);
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         binding = FragmentStepDetailsBinding
                 .bind(inflater.inflate(R.layout.fragment_step_details, container, false));
-
         shouldAutoPlay = true;
-
         return binding.getRoot();
     }
 
@@ -86,6 +90,8 @@ public class StepDetailsFragment extends Fragment {
 
     public void releasePlayer() {
         if (player != null) {
+            playbackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
             shouldAutoPlay = player.getPlayWhenReady();
             player.release();
             player = null;
@@ -98,16 +104,13 @@ public class StepDetailsFragment extends Fragment {
      * @param step : the step about which we would like to display the related video
      */
     public void displayStepVideo(Step step) {
-
         context = getContext();
-
         if(!step.getVideoURL().isEmpty()) {
             showStepVideo(binding.stepVideo, binding.stepVideoThumbnail);
             loadStepVideo(Uri.parse(step.getVideoURL()));
         } else {
             showStepVideoThumbnail(binding.stepVideoThumbnail, binding.stepVideo);
         }
-
         if (!step.getThumbnailURL().isEmpty()) {
             Picasso.get()
                     .load(step.getThumbnailURL())
@@ -119,9 +122,7 @@ public class StepDetailsFragment extends Fragment {
     }
 
     public void loadStepVideo(Uri stepVideoURI) {
-
         boolean needNewPlayer = player == null;
-
         if(needNewPlayer) {
             // 1. Create a default TrackSelector
             TrackSelection.Factory videoTrackSelectionFactory =
@@ -132,20 +133,21 @@ public class StepDetailsFragment extends Fragment {
             player.setPlayWhenReady(shouldAutoPlay);
             // 3. Bind the player to the view.
             binding.stepVideo.setPlayer(player);
-        }
-
+         }
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
                 Util.getUserAgent(context, "Baking"), BANDWIDTH_METER);
-
         // This is the MediaSource representing the media to be played.
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(stepVideoURI);
-
         // Prepare the player with the source.
         player.prepare(videoSource);
+        // Start from the beginning of resume to the last saved position
+        player.seekTo(currentWindow, playbackPosition);
     }
 
+    // This method is used to provide a full screen experience,
+    // when changing the orientation to landscape on phones.
     public void hideSystemUi() {
         binding.stepVideo.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -161,7 +163,13 @@ public class StepDetailsFragment extends Fragment {
      * @param step : the step about which we would like to display the full description
      */
     public void displayStepFullDescription(Step step) {
-        Log.v(LOG_TAG,"LOG// displayStepFullDescription is reached and the step full desc is : " + step.getFullDescription());
         binding.stepFullDescription.setText(step.getFullDescription());
+    }
+
+    // Saves the video's playback position on orientation change
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(STATE_PLAYBACK_POSITION, playbackPosition);
     }
 }

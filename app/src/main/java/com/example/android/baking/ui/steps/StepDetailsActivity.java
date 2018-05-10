@@ -42,7 +42,7 @@ public class StepDetailsActivity extends AppCompatActivity {
             finish();
             return;
         }
-
+        // Check and get the current orientation of the device
         Display display = ((WindowManager) Objects.requireNonNull(this.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
         orientation = display.getRotation();
 
@@ -69,7 +69,7 @@ public class StepDetailsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // Make full screen experience if the orientation is landscape
-        if(orientation == 1) {
+        if(orientation == 1 || orientation == 3) {
             stepDetailsFragment.hideSystemUi();
         }
         // Register the EventBus to handle events and react accordingly
