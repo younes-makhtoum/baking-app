@@ -1,6 +1,7 @@
 package com.example.android.baking.ui.recipes;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.example.android.baking.R;
 import com.example.android.baking.databinding.ActivityRecipesListBinding;
@@ -18,12 +17,14 @@ import com.example.android.baking.services.RemoteClient;
 import com.example.android.baking.services.Utils;
 import com.example.android.baking.models.Recipe;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.MerlinsBeard;
 import com.novoda.merlin.registerable.connection.Connectable;
 
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,8 +42,6 @@ public class RecipesListActivity extends AppCompatActivity {
     private Merlin merlin;
     // Recipes loaded checker
     private boolean recipesAreLoaded = false;
-    // Orientation detection
-    private static int orientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +83,14 @@ public class RecipesListActivity extends AppCompatActivity {
         } else {
             getRecipes();
         }
+
+        // Testing the retrieving of the saved list of recipes from the shared preferences
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPref.getString("key_saved_recipes_list", "");
+        Type type = new TypeToken <List<Recipe>>(){}.getType();
+        List<Recipe> recipesList = gson.fromJson(json, type);
+        Log.v(LOG_TAG, "LOG// recipesList = " + recipesList);
     }
 
     @Override
@@ -110,10 +117,15 @@ public class RecipesListActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {
+                    // Start by saving the list of recipes in the SharedPreferences
+                    saveRecipesList(response.body());
+                    // Pass in the recipes list to the activity's adapter for display
                     recipesListAdapter.setRecipeInfoList(response.body());
                     recipesListAdapter.notifyDataSetChanged();
                     Utils.showResults(binding.recyclerMain.loadingSpinner,
                             binding.recyclerMain.recyclerView);
+
+                    // Update the recipes list retrieval status
                     recipesAreLoaded = true;
                 } else {
                     Utils.showIssueDisclaimer(binding.recyclerMain.recyclerView,
@@ -126,5 +138,15 @@ public class RecipesListActivity extends AppCompatActivity {
                         binding.recyclerMain.issueView, R.drawable.error_avatar);
             }
         });
+    }
+
+    // Helper method to save the list of recipes in a shared preferences file
+    private void saveRecipesList(List<Recipe> recipesList){
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String serializedRecipesList = gson.toJson(recipesList);
+        editor.putString(getString(R.string.key_saved_recipes_list), serializedRecipesList);
+        editor.apply();
     }
 }

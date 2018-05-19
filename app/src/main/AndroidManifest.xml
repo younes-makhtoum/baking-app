@@ -15,16 +15,35 @@
         <activity android:name=".ui.recipes.RecipesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.steps.DetailActivity"
             android:parentActivityName=".ui.recipes.RecipesListActivity">
+
         </activity>
         <activity
             android:name=".ui.steps.StepDetailsActivity"
             android:parentActivityName=".ui.steps.DetailActivity">
+
+        </activity>
+
+        <receiver android:name=".services.widget.RecipeWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_widget_provider_info" />
+        </receiver>
+
+        <activity android:name=".services.widget.RecipeWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
         </activity>
     </application>
 
