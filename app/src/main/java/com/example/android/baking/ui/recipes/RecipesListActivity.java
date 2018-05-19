@@ -83,14 +83,6 @@ public class RecipesListActivity extends AppCompatActivity {
         } else {
             getRecipes();
         }
-
-        // Testing the retrieving of the saved list of recipes from the shared preferences
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPref.getString("key_saved_recipes_list", "");
-        Type type = new TypeToken <List<Recipe>>(){}.getType();
-        List<Recipe> recipesList = gson.fromJson(json, type);
-        Log.v(LOG_TAG, "LOG// recipesList = " + recipesList);
     }
 
     @Override
@@ -142,7 +134,7 @@ public class RecipesListActivity extends AppCompatActivity {
 
     // Helper method to save the list of recipes in a shared preferences file
     private void saveRecipesList(List<Recipe> recipesList){
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("baking-shared-prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         Gson gson = new Gson();
         String serializedRecipesList = gson.toJson(recipesList);

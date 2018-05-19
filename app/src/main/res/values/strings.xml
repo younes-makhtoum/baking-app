@@ -6,9 +6,13 @@
     <string name="steps_title">Steps</string>
 
     <!-- Widget strings-->
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
+    <string name="widget_recipe_name">Recipe Name</string>
+    <string name="widget_configuration_screen_prompt">Select a recipe</string>
+    <string name="widget_nutella_pie">Nutella Pie</string>
+    <string name="widget_brownies">Brownies</string>
+    <string name="widget_yellow_cake">Yellow Cake</string>
+    <string name="widget_cheese_cake">Cheese Cake</string>
+    <string name="widget_add">Add widget</string>
 
     <!-- Shared preferences keys-->
     <string name="key_saved_recipes_list">key_saved_recipes_list</string>

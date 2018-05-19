@@ -45,4 +45,13 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <!-- Style for the widget radio buttons selection -->
+    <style name="WidgetRadioButtons">
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:background">@color/pureWhite</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:layout_margin">@dimen/small_margin</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

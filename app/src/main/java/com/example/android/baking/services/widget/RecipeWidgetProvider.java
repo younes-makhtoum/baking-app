@@ -3,9 +3,12 @@ package com.example.android.baking.services.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.android.baking.R;
+import com.example.android.baking.models.Recipe;
 
 /**
  * Implementation of App Widget functionality.
@@ -13,32 +16,44 @@ import com.example.android.baking.R;
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    // Tag for log messages
+    private static final String LOG_TAG = RecipeWidgetProvider.class.getName();
 
-        CharSequence widgetText = RecipeWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+    public static Recipe mSelectedRecipe;
+
+    static void updateRecipeWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId, Recipe selectedRecipe) {
+
+        // Retrieve the list of recipes
+        mSelectedRecipe = selectedRecipe;
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-
+        RemoteViews remoteViews = getIngredientsListRemoteViews(context);
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+    }
+
+    /**
+     * Creates and returns the RemoteViews to be displayed in the widget
+     *
+     * @param context The context
+     * @return The RemoteViews for the widget
+     */
+    private static RemoteViews getIngredientsListRemoteViews(Context context) {
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
+
+        // Set the IngredientsListWidgetService intent to act as the adapter for the ListView
+        Intent intent = new Intent(context, IngredientsListWidgetService.class);
+
+        views.setTextViewText(R.id.widget_recipe_name, mSelectedRecipe.getName());
+        views.setRemoteAdapter(R.id.widget_recipe_ingredients, intent);
+
+        return views;
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        // When the user deletes the widget, delete the preference associated with it.
-        for (int appWidgetId : appWidgetIds) {
-            RecipeWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
-        }
+        // Enter relevant functionality for when widgets instances are updated
     }
 
     @Override
@@ -51,4 +66,3 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 }
-
