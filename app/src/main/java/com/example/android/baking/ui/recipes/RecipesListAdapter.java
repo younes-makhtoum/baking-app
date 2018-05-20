@@ -13,7 +13,6 @@ import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
 import com.example.android.baking.services.events.RecipeSelectionEvent;
 import com.example.android.baking.ui.steps.DetailActivity;
-import static com.example.android.baking.ui.recipes.RecipesListActivity.recipesList;
 
 import org.greenrobot.eventbus.EventBus;
 
