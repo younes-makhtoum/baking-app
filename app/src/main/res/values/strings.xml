@@ -16,5 +16,6 @@
 
     <!-- Shared preferences keys-->
     <string name="key_saved_recipes_list">key_saved_recipes_list</string>
+    <string name="key_saved_recipe">key_saved_recipe</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.example.android.baking.ui.recipes;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
@@ -8,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 
 import com.example.android.baking.R;
 import com.example.android.baking.databinding.ActivityRecipesListBinding;
@@ -18,12 +16,10 @@ import com.example.android.baking.services.Utils;
 import com.example.android.baking.models.Recipe;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.MerlinsBeard;
 import com.novoda.merlin.registerable.connection.Connectable;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 import retrofit2.Call;

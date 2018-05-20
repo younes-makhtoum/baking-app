@@ -28,9 +28,9 @@ public class RecipeWidgetConfigureActivity extends Activity {
     // Tag for log messages
     private static final String LOG_TAG = RecipeWidgetConfigureActivity.class.getName();
 
+    // Class fields
     private List<Recipe> recipesList;
     private Recipe selectedRecipe;
-
     int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
     public RecipeWidgetConfigureActivity() {
@@ -40,9 +40,7 @@ public class RecipeWidgetConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
+        // Cancel the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.recipe_widget_configure);
@@ -70,15 +68,12 @@ public class RecipeWidgetConfigureActivity extends Activity {
     // Handle the button click to add a widget
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
+            // Get the context of the configuration activity
             final Context context = RecipeWidgetConfigureActivity.this;
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            RecipeWidgetProvider.updateRecipeWidget(context, appWidgetManager, appWidgetId, selectedRecipe);
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
+            // Save the selected recipe in the shared preferences file
+            saveWidgetRecipe(context, selectedRecipe, appWidgetId);
+            // Update the app widget
+            updateWidgetRecipe(context);
         }
     };
 
@@ -105,6 +100,27 @@ public class RecipeWidgetConfigureActivity extends Activity {
                     selectedRecipe = recipesList.get(3);
                     break;
         }
+    }
+
+    // Save the selected recipe for a given widget ID in shared preferences
+    public void saveWidgetRecipe(Context context, Recipe selectedRecipe, int appWidgetId) {
+        SharedPreferences sharedPref = context.getSharedPreferences("baking-shared-prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String serializedSelectedRecipe = gson.toJson(selectedRecipe);
+        editor.putString(getString(R.string.key_saved_recipe) + appWidgetId, serializedSelectedRecipe);
+        editor.apply();
+    }
+
+    public void updateWidgetRecipe(Context context){
+        // It is the responsibility of the configuration activity to update the app widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RecipeWidgetProvider.updateRecipeWidget(context, appWidgetManager, appWidgetId, selectedRecipe);
+        // Make sure we pass back the original appWidgetId
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        setResult(RESULT_OK, resultValue);
+        finish();
     }
 }
 
