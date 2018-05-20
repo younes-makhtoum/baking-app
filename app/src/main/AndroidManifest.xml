@@ -22,13 +22,19 @@
         <activity
             android:name=".ui.steps.DetailActivity"
             android:parentActivityName=".ui.recipes.RecipesListActivity">
-
         </activity>
         <activity
             android:name=".ui.steps.StepDetailsActivity"
             android:parentActivityName=".ui.steps.DetailActivity">
-
         </activity>
+        <activity android:name=".services.widget.RecipeWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".services.widget.IngredientsListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".services.widget.RecipeWidgetProvider">
             <intent-filter>
@@ -39,17 +45,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/recipe_widget_provider_info" />
         </receiver>
-
-        <activity android:name=".services.widget.RecipeWidgetConfigureActivity">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name=".services.widget.IngredientsListWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
     </application>
 
 </manifest>
