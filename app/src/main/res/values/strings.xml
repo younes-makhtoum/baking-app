@@ -4,6 +4,23 @@
     <!-- Segments titles-->
     <string name="ingredients_title">Ingredients</string>
     <string name="steps_title">Steps</string>
+    <string name="appwidget_recipe_name">Recipe Name</string>
+
+    <!-- Widget strings-->
+    <string name="widget_configuration_screen_prompt">Select a recipe</string>
+
+    <string name="widget_nutella_pie">Nutella Pie</string>
+    <string name="widget_brownies">Brownies</string>
+    <string name="widget_yellow_cake">Yellow Cake</string>
+    <string name="widget_cheese_cake">Cheese Cake</string>
+
+    <string name="widget_add">Add widget</string>
+
+    <!-- Widget strings-->
+    <string name="widget_empty_recipes_list_error_message">Recipes are not yet available</string>
+
+    <!-- Shared preferences keys-->
+    <string name="key_saved_recipes_list">key_saved_recipes_list</string>
 
     <!-- Widget strings-->
     <string name="widget_recipe_name">Recipe Name</string>
