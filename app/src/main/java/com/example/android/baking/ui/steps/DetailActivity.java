@@ -1,22 +1,15 @@
 package com.example.android.baking.ui.steps;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.example.android.baking.R;
 import com.example.android.baking.models.Recipe;
-import com.example.android.baking.models.Step;
 import com.example.android.baking.services.events.RecipeSelectionEvent;
 import com.example.android.baking.services.events.StepSelectionEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
 

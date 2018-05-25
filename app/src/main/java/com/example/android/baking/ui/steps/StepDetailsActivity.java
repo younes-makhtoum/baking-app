@@ -3,7 +3,6 @@ package com.example.android.baking.ui.steps;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.WindowManager;

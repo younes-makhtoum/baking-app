@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.baking.R;
-import com.example.android.baking.models.Recipe;
 import com.example.android.baking.models.Step;
 import com.example.android.baking.services.events.StepSelectionEvent;
-import com.example.android.baking.ui.steps.DetailActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
